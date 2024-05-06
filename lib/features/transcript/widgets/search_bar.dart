@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final TextEditingController searchController;
+
   const CustomSearchBar({super.key, required this.searchController});
 
   @override
@@ -15,13 +16,14 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   @override
   Widget build(BuildContext context) {
     return SearchBar(
+      controller: widget.searchController,
       hintText: "What's in the dish? (optional)",
       hintStyle: const MaterialStatePropertyAll(
         TextStyle(
           color: kTextColor,
         ),
       ),
-      textStyle: MaterialStatePropertyAll(
+      textStyle: const MaterialStatePropertyAll(
         TextStyle(color: Colors.white),
       ),
       shape: MaterialStatePropertyAll(
@@ -33,8 +35,13 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       backgroundColor: const MaterialStatePropertyAll(kSecondaryColor),
       trailing: [
         IconButton(
-          onPressed: () {
-            context.router.push(const RecordingRoute());
+          onPressed: () async {
+            final result = await context.router.push(const RecordingRoute());
+            if (result != null) {
+              setState(() {
+                widget.searchController.text = result.toString();
+              });
+            }
           },
           icon: const Icon(
             Icons.mic,

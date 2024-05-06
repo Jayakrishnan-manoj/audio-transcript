@@ -1,13 +1,10 @@
 import 'dart:async';
 
-import 'package:audio_transcript/routes/routes.dart';
 import 'package:audio_transcript/shared/utils/colors.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:flutter/widgets.dart';
 
 @RoutePage()
 class RecordingScreen extends StatefulWidget {
@@ -19,7 +16,7 @@ class RecordingScreen extends StatefulWidget {
 
 class _RecordingScreenState extends State<RecordingScreen> {
   final SpeechToText _speechToText = SpeechToText();
-
+  late Timer _timer;
   String _wordsSpoken = "";
 
   @override
@@ -40,6 +37,12 @@ class _RecordingScreenState extends State<RecordingScreen> {
     await _speechToText.listen(
       onResult: _onSpeechResult,
     );
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (!_speechToText.isListening) {
+        _timer.cancel();
+        context.router.maybePop(_wordsSpoken);
+      }
+    });
   }
 
   void _onSpeechResult(result) {
