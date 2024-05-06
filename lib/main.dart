@@ -1,4 +1,5 @@
 import 'package:audio_transcript/routes/routes.dart';
+import 'package:audio_transcript/shared/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'Audio Transcript',
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: kScaffoldBackgroundColor,
+      ),
       routerConfig: _appRouter.config(),
     );
   }

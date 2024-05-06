@@ -1,3 +1,4 @@
+import 'package:audio_transcript/features/transcript/widgets/search_bar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,18 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final TextEditingController controller = TextEditingController();
+
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: CustomSearchBar(
+            searchController: controller,
+          ),
+        ),
+      ),
+    );
   }
 }
