@@ -1,7 +1,12 @@
+import 'dart:async';
+
+import 'package:audio_transcript/routes/routes.dart';
 import 'package:audio_transcript/shared/utils/colors.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter/widgets.dart';
 
 @RoutePage()
@@ -13,12 +18,42 @@ class RecordingScreen extends StatefulWidget {
 }
 
 class _RecordingScreenState extends State<RecordingScreen> {
+  final SpeechToText _speechToText = SpeechToText();
+
+  String _wordsSpoken = "";
+
+  @override
+  void initState() {
+    super.initState();
+    initSpeech();
+  }
+
+  void initSpeech() async {
+    bool _speechEnabled = await _speechToText.initialize().whenComplete(
+          () => _startListening(),
+        );
+    print(_speechEnabled);
+    setState(() {});
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+    );
+  }
+
+  void _onSpeechResult(result) {
+    setState(() {
+      _wordsSpoken = "${result.recognizedWords}";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 40   ,
+          vertical: 40,
           horizontal: 10,
         ),
         child: Align(
@@ -37,7 +72,9 @@ class _RecordingScreenState extends State<RecordingScreen> {
                 height: 10,
               ),
               Text(
-                '"Name of items in the dish"',
+                _wordsSpoken == ""
+                    ? "Name of the items in the dish"
+                    : _wordsSpoken,
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -47,28 +84,31 @@ class _RecordingScreenState extends State<RecordingScreen> {
               const SizedBox(
                 height: 30,
               ),
-              AudioWave(
-                height: 32,
-                width: 120,
-                spacing: 4,
-                animationLoop: 0,
-                bars: [
-                  AudioWaveBar(heightFactor: 0.7, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.2, color: kTextColor),
-                  AudioWaveBar(heightFactor: 1, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.9, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.3, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.5, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.1, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.7, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.2, color: kTextColor),
-                  AudioWaveBar(heightFactor: 1, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.9, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.3, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.5, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.1, color: kTextColor),
-                  AudioWaveBar(heightFactor: 0.7, color: kTextColor),
-                ],
+              Visibility(
+                visible: _speechToText.isListening,
+                child: AudioWave(
+                  height: 32,
+                  width: 120,
+                  spacing: 4,
+                  animationLoop: 0,
+                  bars: [
+                    AudioWaveBar(heightFactor: 0.7, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.2, color: kTextColor),
+                    AudioWaveBar(heightFactor: 1, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.9, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.3, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.5, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.1, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.7, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.2, color: kTextColor),
+                    AudioWaveBar(heightFactor: 1, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.9, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.3, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.5, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.1, color: kTextColor),
+                    AudioWaveBar(heightFactor: 0.7, color: kTextColor),
+                  ],
+                ),
               ),
             ],
           ),
