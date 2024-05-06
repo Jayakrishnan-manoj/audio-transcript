@@ -1,4 +1,6 @@
+import 'package:audio_transcript/routes/routes.dart';
 import 'package:audio_transcript/shared/utils/colors.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatefulWidget {
@@ -31,7 +33,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       backgroundColor: const MaterialStatePropertyAll(kSecondaryColor),
       trailing: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            context.router.push(const RecordingRoute());
+          },
           icon: const Icon(
             Icons.mic,
             color: kTextColor,

@@ -20,7 +20,13 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: const HomeScreen(),
       );
-    }
+    },
+    RecordingRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const RecordingScreen(),
+      );
+    },
   };
 }
 
@@ -34,6 +40,20 @@ class HomeRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'HomeRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [RecordingScreen]
+class RecordingRoute extends PageRouteInfo<void> {
+  const RecordingRoute({List<PageRouteInfo>? children})
+      : super(
+          RecordingRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RecordingRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
