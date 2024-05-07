@@ -5,6 +5,7 @@ import 'package:audio_transcript/shared/utils/helpers.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:record/record.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 @RoutePage()
@@ -16,10 +17,12 @@ class RecordingScreen extends StatefulWidget {
 }
 
 class _RecordingScreenState extends State<RecordingScreen> {
-  
+
   final SpeechToText _speechToText = SpeechToText();
+  final recorder = AudioRecorder();
   late Timer _timer;
   String _wordsSpoken = "";
+  String audioPath = '';
 
   @override
   void initState() {
@@ -43,8 +46,9 @@ class _RecordingScreenState extends State<RecordingScreen> {
     setState(() {});
   }
 
+  
   void _startListening() async {
-    await _speechToText.listen(
+    await _speechToText.listen( 
       onResult: _onSpeechResult,
     );
     _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
