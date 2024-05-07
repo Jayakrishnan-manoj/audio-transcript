@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audio_transcript/shared/utils/colors.dart';
+import 'package:audio_transcript/shared/utils/helpers.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class RecordingScreen extends StatefulWidget {
 }
 
 class _RecordingScreenState extends State<RecordingScreen> {
+  
   final SpeechToText _speechToText = SpeechToText();
   late Timer _timer;
   String _wordsSpoken = "";
@@ -26,10 +28,18 @@ class _RecordingScreenState extends State<RecordingScreen> {
   }
 
   void initSpeech() async {
-    bool _speechEnabled = await _speechToText.initialize().whenComplete(
-          () => _startListening(),
-        );
-    print(_speechEnabled);
+    bool speechEnabled = await _speechToText.initialize().then(
+      (value) {
+        return value;
+      },
+    );
+    if (speechEnabled) {
+      _startListening();
+    } else {
+      context.router.maybePop();
+      showSnackbar(context, "Please enable permissions in phone settings", Colors.red);
+    }
+    print(speechEnabled);
     setState(() {});
   }
 
