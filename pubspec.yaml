@@ -32,9 +32,10 @@ dependencies:
   auto_route: null
   cupertino_icons: ^1.0.6
   envied: ^0.5.4+1
-  envied_generator:  
+  envied_generator: null
   flutter:
     sdk: flutter
+  http: ^1.2.1
   record: ^5.0.5
   speech_to_text: ^6.6.0
 
